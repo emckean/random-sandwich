@@ -1,0 +1,41 @@
+<html>
+    <body><h1>Sandwich time!</h1><p><i><span id=name>Name</span></i></p>
+    <p><span id="description">Description</span></p>
+    <p>Source: <a href="The up-to-date sandwich book : 400 ways to make a sandwich by Eva Greene Fuller"><i>The up-to-date sandwich book : 400 ways to make a sandwich</i> by Eva Greene Fuller (1909)</a></p>
+    </body>
+
+    <script>
+        async function displayRandomSandwichName() {
+            const nameSpan = document.getElementById('name');
+            if (!nameSpan) {
+                console.error('Error: Could not find the span element with id "name".');
+                return;
+            }
+            const descriptionSpan = document.getElementById('description');
+            if (!descriptionSpan) {
+                console.error('Error: Could not find the span element with id "description".');
+                return;
+            }
+
+            try {
+                const response = await fetch('data/sandwiches.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const sandwiches = await response.json();
+                const randomIndex = Math.floor(Math.random() * sandwiches.length);
+                const randomSandwich = sandwiches[randomIndex];
+                nameSpan.textContent = randomSandwich.name;
+                descriptionSpan.textContent = randomSandwich.recipe;
+                
+            } catch (error) {
+                console.error('Error fetching or displaying sandwich data:', error);
+                nameSpan.textContent = 'Could not load sandwich name';
+                descriptionSpan.textContent = 'Could not load sandwich recipe.';
+            }
+        }
+
+        // Call the function to display a random sandwich name when the page loads
+        displayRandomSandwichName();
+    </script>
+</html>
